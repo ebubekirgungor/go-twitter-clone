@@ -28,7 +28,7 @@ func main() {
 
 	setUpRoutes(app)
 
-	app.Static("/", "./public")
+	app.Static("/", "./client/dist")
 
 	app.Use(cors.New())
 
