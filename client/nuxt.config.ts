@@ -2,7 +2,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   app: {
     head: {
-      title: "Twitter",
+      title: "Twitter. It's what's happening",
       link: [{ rel: "icon", type: "image/ico", href: "twitter.ico" }],
     },
   },

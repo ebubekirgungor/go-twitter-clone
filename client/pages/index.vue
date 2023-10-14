@@ -7,20 +7,32 @@ const login_dialog = ref(route.query.login === null);
     <transition name="modal-fade" mode="out-in">
       <div
         v-if="login_dialog"
-        class="bg-[#5b708366] inset-x-0 inset-y-0 w-full h-full fixed font-bold text-black dark:text-stone-200"
+        class="bg-[#5b708366] inset-x-0 inset-y-0 w-full h-full fixed font-bold text-black dark:text-stone-200 select-none"
       >
         <div
-          class="fixed z-2 flex flex-col m-auto inset-x-0 inset-y-0 p-2 min-w-[600px] w-[600px] min-h-[400px] h-[500px] bg-white dark:bg-black rounded-2xl"
+          class="fixed z-2 flex flex-col items-center m-auto inset-x-0 inset-y-0 p-2 min-w-[600px] w-[600px] min-h-[400px] h-[500px] bg-white dark:bg-black rounded-2xl"
         >
-          <NuxtLink
-            to="/"
-            @click="login_dialog = false"
-            class="transition duration-300 ease-in-out flex justify-center items-center w-10 h-10 rounded-full hover:bg-white/10"
-            >x</NuxtLink
-          >
-          <h1 class="text-3xl text-center grow select-none pb-6">
-            Log in to Twitter
-          </h1>
+          <div class="h-8 self-start">
+            <NuxtLink
+              to="/"
+              @click="login_dialog = false"
+              class="transition duration-300 ease-in-out flex justify-center items-center w-10 h-10 rounded-full hover:bg-white/10"
+              ><img src="/close.svg" class="w-6 h-6"
+            /></NuxtLink>
+          </div>
+          <div class="h-32">
+            <h1 class="text-3xl mt-5">Log in to Twitter</h1>
+          </div>
+          <div class="h-16">
+            <input placeholder="E-mail or username" type="text" class="transition duration-300 ease-in-out w-[300px] h-10 rounded-md font-normal bg-black" />
+          </div>
+          <div class="h-16">
+            <button
+              class="transition duration-300 ease-in-out w-[300px] h-10 rounded-full text-black bg-stone-200 hover:bg-white/80"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </transition>
