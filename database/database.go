@@ -16,7 +16,6 @@ type Dbinstance struct {
 
 var DB Dbinstance
 
-// connectDb
 func ConnectDb() {
 	dsn := "host=localhost user=postgres password='123456' dbname=twitter port=5432 sslmode=disable"
 

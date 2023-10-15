@@ -28,3 +28,6 @@ client/.nitro
 client/.cache
 client/dist
 client/node_modules
+
+# .env
+.env

@@ -1,4 +1,4 @@
-package tweet
+package controllers
 
 import (
 	"go-twitter-clone/database"
@@ -51,9 +51,9 @@ func AddTweet(c *fiber.Ctx) error {
 	return c.Status(200).JSON(tweet)
 }
 
-func Delete(c *fiber.Ctx) error {
+func DeleteTweet(c *fiber.Ctx) error {
 	tweet := []models.Tweet{}
 	database.DB.Db.Where("id = ?", c.Params("id")).Delete(&tweet)
 
-	return c.Status(200).JSON("deleted")
+	return c.Status(200).JSON("Tweet deleted")
 }
