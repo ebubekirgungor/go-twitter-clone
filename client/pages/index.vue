@@ -2,87 +2,265 @@
 const route = useRoute();
 const login_dialog = ref(route.query.login === null);
 const signup_dialog = ref(route.query.signup === null);
+const login_step = ref(1);
+const signup_step = ref(1);
 const login_identity = ref("");
+const login_password = ref("");
+const check_error = ref("");
+const login_error = ref("");
 const user = ref({
   name: "",
   email: "",
+  username: "",
+  password: "",
+  confirm_password: "",
 });
 const transition = ref(true);
 const close_login_dialog = () => {
-  transition.value = false;
   login_dialog.value = false;
-  signup_dialog.value = true;
+  login_identity.value = "";
+  login_password.value = "";
+};
+const close_signup_dialog = () => {
+  signup_dialog.value = false;
+  transition.value = true;
+  user.value = {
+    name: "",
+    email: "",
+    username: "",
+    password: "",
+    confirm_password: "",
+  };
+};
+const signup = async () => {
+  const { data: response } = await useFetch("http://localhost/api/users", {
+    method: "post",
+    body: {
+      name: user.value.name,
+      email: user.value.email,
+      username: user.value.username,
+      password: user.value.password,
+    },
+  });
+  console.log(response);
+};
+const check_user = async () => {
+  const { data: response } = await useFetch(
+    "http://localhost/api/auth/check_user",
+    {
+      method: "post",
+      body: {
+        identity: login_identity.value,
+      },
+    }
+  );
+  if (response.value == "Ok") {
+    login_step.value++;
+    check_error.value = "";
+  } else check_error.value = response.value as string;
+};
+const login = async () => {
+  const { data: response } = await useFetch("http://localhost/api/auth/login", {
+    method: "post",
+    body: {
+      identity: login_identity.value,
+      password: login_password.value,
+    },
+  });
+  console.log(response)
+  if ((response.value as any).status == "success") {
+    navigateTo("/main");
+  } else login_error.value = (response.value as any).message as string;
 };
 </script>
 <template>
   <main class="h-screen bg-white dark:bg-black">
     <transition :css="transition" name="modal-fade" mode="out-in">
-      <Dialog v-if="login_dialog" @close="login_dialog = false">
-        <div class="h-32">
-          <h1 class="text-3xl mt-5">Sign in to Twitter</h1>
+      <Dialog
+        v-if="login_dialog"
+        @close="close_login_dialog"
+        @back="login_step--"
+        type="login"
+        :login_step="login_step"
+      >
+        <div v-if="login_step == 1">
+          <div class="h-32">
+            <h1 class="text-3xl mt-5">Sign in to Twitter</h1>
+          </div>
+          <div class="h-16">
+            <input
+              v-model="login_identity"
+              placeholder="E-mail or username"
+              type="text"
+              class="transition duration-300 ease-in-out w-[300px] h-10 rounded-md font-normal dark:bg-black"
+            />
+          </div>
+          <div class="h-16">
+            <button
+              :disabled="login_identity == ''"
+              @click="check_user"
+              class="transition duration-300 ease-in-out w-[300px] h-10 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
+            >
+              Next
+            </button>
+          </div>
+          <div class="h-20">
+            <button
+              class="transition duration-300 ease-in-out w-[300px] h-10 rounded-full border border-slate-600 hover:bg-white/10"
+            >
+              Forgot password?
+            </button>
+          </div>
+          <div class="h-12">
+            <h1 class="text-center font-normal text-red-600">
+              {{ check_error }}
+            </h1>
+          </div>
+          <h1 class="font-normal text-gray-500">
+            Don't have an account?
+            <NuxtLink
+              @click="close_login_dialog"
+              to="?signup"
+              class="text-cyan-500"
+              >Sign up</NuxtLink
+            >
+          </h1>
         </div>
-        <div class="h-16">
-          <input
-            v-model="login_identity"
-            placeholder="E-mail or username"
-            type="text"
-            class="transition duration-300 ease-in-out w-[300px] h-10 rounded-md font-normal bg-black"
-          />
+        <div v-if="login_step == 2">
+          <div class="h-40">
+            <h1 class="text-3xl mt-5">Sign in to Twitter</h1>
+          </div>
+          <div class="h-20">
+            <input
+              v-model="login_password"
+              placeholder="Password"
+              type="password"
+              class="transition duration-300 ease-in-out w-[300px] h-10 rounded-md font-normal dark:bg-black"
+            />
+          </div>
+          <div class="h-32">
+            <h1 class="text-center font-normal text-red-600">
+              {{ login_error }}
+            </h1>
+          </div>
+          <div class="h-16">
+            <button
+              :disabled="login_password == ''"
+              @click="login"
+              class="transition duration-300 ease-in-out w-[300px] h-10 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
+            >
+              Log in
+            </button>
+          </div>
         </div>
-        <div class="h-16">
-          <button
-            :disabled="login_identity == ''"
-            class="transition duration-300 ease-in-out w-[300px] h-10 rounded-full text-black bg-stone-200 hover:bg-white/80 disabled:bg-white/40 disabled:pointer-events-none"
-          >
-            Next
-          </button>
-        </div>
-        <div class="h-32">
-          <button
-            class="transition duration-300 ease-in-out w-[300px] h-10 rounded-full border border-slate-600 hover:bg-white/10"
-          >
-            Forgot password?
-          </button>
-        </div>
-        <h1 class="font-normal text-gray-500">
-          Don't have an account?
-          <NuxtLink
-            @click="close_login_dialog"
-            to="?signup"
-            class="text-cyan-500"
-            >Sign up</NuxtLink
-          >
-        </h1>
       </Dialog>
     </transition>
     <transition :css="transition" name="modal-fade" mode="out-in">
-      <Dialog v-if="signup_dialog" @close="signup_dialog = false; transition = true;">
-        <div class="h-32">
-          <h1 class="text-3xl mt-5">Create your account</h1>
+      <Dialog
+        v-if="signup_dialog"
+        @close="close_signup_dialog"
+        @back="signup_step--"
+        type="signup"
+        :signup_step="signup_step"
+      >
+        <div v-if="signup_step == 1">
+          <div class="h-28">
+            <h1 class="text-3xl mt-5">Create your account</h1>
+          </div>
+          <div class="h-16">
+            <input
+              v-model="user.name"
+              placeholder="Name"
+              type="text"
+              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+            />
+          </div>
+          <div class="h-16">
+            <input
+              v-model="user.email"
+              placeholder="E-mail"
+              type="text"
+              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+            />
+          </div>
+          <div class="h-32">
+            <input
+              v-model="user.username"
+              placeholder="Username"
+              type="text"
+              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+            />
+          </div>
+          <div class="h-16">
+            <button
+              :disabled="user.name == '' || user.email == ''"
+              @click="signup_step++"
+              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
+            >
+              Next
+            </button>
+          </div>
         </div>
-        <div class="h-16">
-          <input
-            v-model="user.name"
-            placeholder="Name"
-            type="text"
-            class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal bg-black"
-          />
+        <div v-if="signup_step == 2">
+          <div class="h-32">
+            <h1 class="text-3xl mt-5">Set password</h1>
+          </div>
+          <div class="h-16">
+            <input
+              v-model="user.password"
+              placeholder="Password"
+              type="password"
+              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+            />
+          </div>
+          <div class="h-44">
+            <input
+              v-model="user.confirm_password"
+              placeholder="Confirm Password"
+              type="password"
+              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+            />
+          </div>
+          <div class="h-16">
+            <button
+              :disabled="
+                user.password == '' || user.confirm_password != user.password
+              "
+              @click="signup_step++"
+              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
+            >
+              Next
+            </button>
+          </div>
         </div>
-        <div class="grow">
-          <input
-            v-model="user.email"
-            placeholder="E-mail"
-            type="text"
-            class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal bg-black"
-          />
-        </div>
-        <div class="h-16">
-          <button
-            :disabled="user.name == '' || user.email == ''"
-            class="transition duration-300 ease-in-out w-[438px] h-12 rounded-full text-black bg-stone-200 hover:bg-white/80 disabled:bg-white/40 disabled:pointer-events-none"
-          >
-            Next
-          </button>
+        <div v-if="signup_step == 3">
+          <div class="h-32">
+            <h1 class="text-3xl mt-5">Sign up</h1>
+          </div>
+          <div class="h-16">
+            <input
+              :placeholder="user.name"
+              type="text"
+              disabled
+              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+            />
+          </div>
+          <div class="h-44">
+            <input
+              :placeholder="user.email"
+              type="text"
+              disabled
+              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+            />
+          </div>
+          <div class="h-16">
+            <button
+              @click="signup"
+              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
+            >
+              Sign up
+            </button>
+          </div>
         </div>
       </Dialog>
     </transition>
@@ -102,7 +280,7 @@ const close_login_dialog = () => {
           <NuxtLink
             to="?signup"
             @click="signup_dialog = true"
-            class="transition duration-300 ease-in-out w-[300px] h-10 flex justify-center items-center rounded-full bg-cyan-600 hover:bg-cyan-500"
+            class="transition duration-300 ease-in-out w-[300px] h-10 flex justify-center items-center rounded-full bg-cyan-600 hover:bg-cyan-500 text-stone-200"
           >
             Create account
           </NuxtLink>

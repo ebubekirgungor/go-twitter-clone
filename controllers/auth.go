@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"fmt"
 	"net/mail"
 	"time"
 
@@ -15,6 +16,13 @@ import (
 	"gorm.io/gorm"
 )
 
+type UserData struct {
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
 func CheckPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
@@ -22,6 +30,7 @@ func CheckPasswordHash(password, hash string) bool {
 
 func getUserByEmail(e string) (*models.User, error) {
 	var user models.User
+	fmt.Println(e)
 	if err := database.DB.Db.Where(&models.User{Email: e}).Find(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
@@ -33,6 +42,7 @@ func getUserByEmail(e string) (*models.User, error) {
 
 func getUserByUsername(u string) (*models.User, error) {
 	var user models.User
+	fmt.Println(u)
 	if err := database.DB.Db.Where(&models.User{Username: u}).Find(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
@@ -47,17 +57,36 @@ func isEmail(email string) bool {
 	return err == nil
 }
 
+func CheckUser(c *fiber.Ctx) error {
+	type LoginInput struct {
+		Identity string `json:"identity"`
+	}
+	input := new(LoginInput)
+	user := models.User{}
+
+	if err := c.BodyParser(&input); err != nil {
+		return c.JSON("Error on login request")
+	}
+
+	if isEmail(input.Identity) {
+		database.DB.Db.Where("email = ?", input.Identity).First(&user)
+	} else {
+		database.DB.Db.Where("username = ?", input.Identity).First(&user)
+	}
+
+	if user.Email == "" {
+		return c.JSON("User not found")
+	} else {
+		return c.JSON("Ok")
+	}
+}
+
 func Login(c *fiber.Ctx) error {
 	type LoginInput struct {
 		Identity string `json:"identity"`
 		Password string `json:"password"`
 	}
-	type UserData struct {
-		ID       uint   `json:"id"`
-		Username string `json:"username"`
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
+
 	input := new(LoginInput)
 	var userData UserData
 
@@ -87,7 +116,7 @@ func Login(c *fiber.Ctx) error {
 	}
 
 	if !CheckPasswordHash(pass, userData.Password) {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{"status": "error", "message": "Invalid password", "data": nil})
+		return c.JSON(fiber.Map{"status": "error", "message": "Invalid password", "data": nil})
 	}
 
 	token := jwt.New(jwt.SigningMethodHS256)

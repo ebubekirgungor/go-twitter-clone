@@ -13,11 +13,11 @@ func main() {
 	database.ConnectDb()
 	app := fiber.New()
 
-	router.SetupRoutes(app)
-
 	app.Static("/", "./client/dist")
 
 	app.Use(cors.New())
+
+	router.SetupRoutes(app)
 
 	app.Use(func(c *fiber.Ctx) error {
 		return c.SendStatus(404)
