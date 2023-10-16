@@ -13,8 +13,6 @@ func main() {
 	database.ConnectDb()
 	app := fiber.New()
 
-	app.Static("/", "./client/dist")
-
 	app.Use(cors.New())
 
 	router.SetupRoutes(app)
@@ -23,5 +21,5 @@ func main() {
 		return c.SendStatus(404)
 	})
 
-	log.Fatal(app.Listen(":80"))
+	log.Fatal(app.Listen(":8080"))
 }

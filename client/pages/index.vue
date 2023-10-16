@@ -20,6 +20,12 @@ const close_login_dialog = () => {
   login_dialog.value = false;
   login_identity.value = "";
   login_password.value = "";
+  check_error.value = "";
+};
+const open_signup_dialog = () => {
+  transition.value = false;
+  login_dialog.value = false;
+  signup_dialog.value = true;
 };
 const close_signup_dialog = () => {
   signup_dialog.value = false;
@@ -33,7 +39,7 @@ const close_signup_dialog = () => {
   };
 };
 const signup = async () => {
-  const { data: response } = await useFetch("http://localhost/api/users", {
+  const { data: response } = await useFetch("/api/users", {
     method: "post",
     body: {
       name: user.value.name,
@@ -46,7 +52,7 @@ const signup = async () => {
 };
 const check_user = async () => {
   const { data: response } = await useFetch(
-    "http://localhost/api/auth/check_user",
+    "/api/auth/check_user",
     {
       method: "post",
       body: {
@@ -60,14 +66,13 @@ const check_user = async () => {
   } else check_error.value = response.value as string;
 };
 const login = async () => {
-  const { data: response } = await useFetch("http://localhost/api/auth/login", {
+  const { data: response } = await useFetch("/api/auth/login", {
     method: "post",
     body: {
       identity: login_identity.value,
       password: login_password.value,
     },
   });
-  console.log(response)
   if ((response.value as any).status == "success") {
     navigateTo("/main");
   } else login_error.value = (response.value as any).message as string;
@@ -112,14 +117,14 @@ const login = async () => {
             </button>
           </div>
           <div class="h-12">
-            <h1 class="text-center font-normal text-red-600">
+            <h1 class="text-center font-normal text-[#ff0000]">
               {{ check_error }}
             </h1>
           </div>
           <h1 class="font-normal text-gray-500">
             Don't have an account?
             <NuxtLink
-              @click="close_login_dialog"
+              @click="open_signup_dialog"
               to="?signup"
               class="text-cyan-500"
               >Sign up</NuxtLink
@@ -139,7 +144,7 @@ const login = async () => {
             />
           </div>
           <div class="h-32">
-            <h1 class="text-center font-normal text-red-600">
+            <h1 class="text-center font-normal text-[#ff0000]">
               {{ login_error }}
             </h1>
           </div>
@@ -267,7 +272,7 @@ const login = async () => {
     <div
       class="h-screen flex justify-center items-center select-none font-bold text-black dark:text-stone-200"
     >
-      <div class="w-[400px] h-[328px] bg-[url(twitter.svg)]"></div>
+      <div class="w-[400px] h-[328px] bg-[url(twitter.svg)] bg-no-repeat"></div>
       <div class="ml-80">
         <div class="h-32">
           <h1 class="text-6xl">Happening now</h1>

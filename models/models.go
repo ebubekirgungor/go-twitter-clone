@@ -15,7 +15,7 @@ type User struct {
 
 type Tweet struct {
 	gorm.Model
-	UserId  int    `gorm:"not null"`
-	Content string `gorm:"not null"`
+	UserId  int    `gorm:"not null" json:"user_id"`
+	Content string `gorm:"not null" json:"content"`
 	User    User
 }
