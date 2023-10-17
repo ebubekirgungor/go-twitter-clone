@@ -8,15 +8,16 @@ const login_identity = ref("");
 const login_password = ref("");
 const check_error = ref("");
 const login_error = ref("");
+const signup_error = ref("");
 const user = ref({
   name: "",
   email: "",
-  username: "",
   password: "",
   confirm_password: "",
 });
 const transition = ref(true);
 const close_login_dialog = () => {
+  transition.value = true;
   login_dialog.value = false;
   login_identity.value = "";
   login_password.value = "";
@@ -33,10 +34,10 @@ const close_signup_dialog = () => {
   user.value = {
     name: "",
     email: "",
-    username: "",
     password: "",
     confirm_password: "",
   };
+  check_error.value = "";
 };
 const signup = async () => {
   const { data: response } = await useFetch("/api/users", {
@@ -44,26 +45,44 @@ const signup = async () => {
     body: {
       name: user.value.name,
       email: user.value.email,
-      username: user.value.username,
+      username: user.value.name.replace(" ", "_"),
       password: user.value.password,
     },
   });
-  console.log(response);
-};
-const check_user = async () => {
-  const { data: response } = await useFetch(
-    "/api/auth/check_user",
-    {
-      method: "post",
-      body: {
-        identity: login_identity.value,
-      },
-    }
-  );
-  if (response.value == "Ok") {
-    login_step.value++;
+  if ((response.value as any).email) {
+    transition.value = false;
+    signup_dialog.value = false;
+    signup_step.value = 1;
+    login_dialog.value = true;
+    user.value = {
+      name: "",
+      email: "",
+      password: "",
+      confirm_password: "",
+    };
     check_error.value = "";
-  } else check_error.value = response.value as string;
+  } else signup_error.value = (response.value as any).message as string;
+};
+const check_user = async (step: string) => {
+  const { data: response } = await useFetch("/api/auth/check_user", {
+    method: "post",
+    body: {
+      identity: step == "login" ? login_identity.value : user.value.email,
+    },
+  });
+
+  if (
+    (step == "login" && response.value == "Ok") ||
+    (step != "login" && response.value != "Ok")
+  ) {
+    if (step == "login") login_step.value++;
+    else signup_step.value++;
+    check_error.value = "";
+  } else
+    check_error.value =
+      step == "login"
+        ? (response.value as string)
+        : "This email is already in use";
 };
 const login = async () => {
   const { data: response } = await useFetch("/api/auth/login", {
@@ -103,7 +122,7 @@ const login = async () => {
           <div class="h-16">
             <button
               :disabled="login_identity == ''"
-              @click="check_user"
+              @click="check_user('login')"
               class="transition duration-300 ease-in-out w-[300px] h-10 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
             >
               Next
@@ -180,7 +199,7 @@ const login = async () => {
               class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
             />
           </div>
-          <div class="h-16">
+          <div class="h-24">
             <input
               v-model="user.email"
               placeholder="E-mail"
@@ -188,18 +207,15 @@ const login = async () => {
               class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
             />
           </div>
-          <div class="h-32">
-            <input
-              v-model="user.username"
-              placeholder="Username"
-              type="text"
-              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
-            />
+          <div class="h-24">
+            <h1 class="text-center font-normal text-[#ff0000]">
+              {{ check_error }}
+            </h1>
           </div>
           <div class="h-16">
             <button
               :disabled="user.name == '' || user.email == ''"
-              @click="signup_step++"
+              @click="check_user('signup')"
               class="transition duration-300 ease-in-out w-[438px] h-12 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
             >
               Next
@@ -250,13 +266,18 @@ const login = async () => {
               class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
             />
           </div>
-          <div class="h-44">
+          <div class="h-16">
             <input
               :placeholder="user.email"
               type="text"
               disabled
               class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
             />
+          </div>
+          <div class="h-28">
+            <h1 class="text-center font-normal text-[#ff0000]">
+              {{ signup_error }}
+            </h1>
           </div>
           <div class="h-16">
             <button
