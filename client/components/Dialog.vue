@@ -8,7 +8,7 @@ export default {
     class="bg-black/40 dark:bg-[#5b708366] inset-x-0 inset-y-0 w-full h-full fixed font-bold text-black dark:text-stone-200 select-none"
   >
     <div
-      class="fixed z-2 flex flex-col items-center m-auto inset-x-0 inset-y-0 p-2 min-w-[600px] w-[600px] min-h-[400px] h-[500px] bg-white dark:bg-black rounded-2xl"
+      class="fixed z-2 flex flex-col items-center m-auto inset-x-0 sm:inset-y-0 p-2 w-full h-[100%] sm:min-w-[600px] sm:w-[600px] sm:min-h-[400px] sm:h-[500px] bg-white dark:bg-black sm:rounded-2xl"
     >
       <div v-if="type == 'signup'" class="h-8 self-start flex">
         <NuxtLink

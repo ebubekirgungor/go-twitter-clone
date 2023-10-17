@@ -26,6 +26,8 @@ const close_login_dialog = () => {
 const open_signup_dialog = () => {
   transition.value = false;
   login_dialog.value = false;
+  login_identity.value = "";
+  check_error.value = "";
   signup_dialog.value = true;
 };
 const close_signup_dialog = () => {
@@ -98,7 +100,7 @@ const login = async () => {
 };
 </script>
 <template>
-  <main class="h-screen bg-white dark:bg-black">
+  <main class="min-h-[100dvh] bg-white dark:bg-black">
     <transition :css="transition" name="modal-fade" mode="out-in">
       <Dialog
         v-if="login_dialog"
@@ -150,11 +152,19 @@ const login = async () => {
             >
           </h1>
         </div>
-        <div v-if="login_step == 2">
+        <div class="h-full flex flex-col" v-if="login_step == 2">
           <div class="h-40">
-            <h1 class="text-3xl mt-5">Sign in to Twitter</h1>
+            <h1 class="text-3xl mt-5">Enter your password</h1>
           </div>
-          <div class="h-20">
+          <div class="h-16">
+            <input
+              :placeholder="login_identity"
+              type="text"
+              disabled
+              class="w-[300px] h-10 rounded-md font-normal dark:bg-black brightness-50 disabled:bg-neutral-800 border-none"
+            />
+          </div>
+          <div class="h-16">
             <input
               v-model="login_password"
               placeholder="Password"
@@ -162,7 +172,7 @@ const login = async () => {
               class="transition duration-300 ease-in-out w-[300px] h-10 rounded-md font-normal dark:bg-black"
             />
           </div>
-          <div class="h-32">
+          <div class="grow">
             <h1 class="text-center font-normal text-[#ff0000]">
               {{ login_error }}
             </h1>
@@ -187,8 +197,8 @@ const login = async () => {
         type="signup"
         :signup_step="signup_step"
       >
-        <div v-if="signup_step == 1">
-          <div class="h-28">
+        <div class="h-full flex flex-col" v-if="signup_step == 1">
+          <div class="h-40 sm:h-32">
             <h1 class="text-3xl mt-5">Create your account</h1>
           </div>
           <div class="h-16">
@@ -196,18 +206,18 @@ const login = async () => {
               v-model="user.name"
               placeholder="Name"
               type="text"
-              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+              class="transition duration-300 ease-in-out w-[300px] sm:w-[438px] h-12 rounded-md font-normal dark:bg-black"
             />
           </div>
-          <div class="h-24">
+          <div class="h-56 sm:h-24">
             <input
               v-model="user.email"
               placeholder="E-mail"
               type="text"
-              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+              class="transition duration-300 ease-in-out w-[300px] sm:w-[438px] h-12 rounded-md font-normal dark:bg-black"
             />
           </div>
-          <div class="h-24">
+          <div class="grow">
             <h1 class="text-center font-normal text-[#ff0000]">
               {{ check_error }}
             </h1>
@@ -216,14 +226,14 @@ const login = async () => {
             <button
               :disabled="user.name == '' || user.email == ''"
               @click="check_user('signup')"
-              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
+              class="transition duration-300 ease-in-out w-[300px] sm:w-[438px] h-12 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
             >
               Next
             </button>
           </div>
         </div>
-        <div v-if="signup_step == 2">
-          <div class="h-32">
+        <div class="h-full flex flex-col" v-if="signup_step == 2">
+          <div class="h-48 sm:h-32">
             <h1 class="text-3xl mt-5">Set password</h1>
           </div>
           <div class="h-16">
@@ -231,15 +241,15 @@ const login = async () => {
               v-model="user.password"
               placeholder="Password"
               type="password"
-              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+              class="transition duration-300 ease-in-out w-[300px] sm:w-[438px] h-12 rounded-md font-normal dark:bg-black"
             />
           </div>
-          <div class="h-44">
+          <div class="grow">
             <input
               v-model="user.confirm_password"
               placeholder="Confirm Password"
               type="password"
-              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+              class="transition duration-300 ease-in-out w-[300px] sm:w-[438px] h-12 rounded-md font-normal dark:bg-black"
             />
           </div>
           <div class="h-16">
@@ -248,14 +258,14 @@ const login = async () => {
                 user.password == '' || user.confirm_password != user.password
               "
               @click="signup_step++"
-              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
+              class="transition duration-300 ease-in-out w-[300px] sm:w-[438px] h-12 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
             >
               Next
             </button>
           </div>
         </div>
-        <div v-if="signup_step == 3">
-          <div class="h-32">
+        <div class="h-full flex flex-col" v-if="signup_step == 3">
+          <div class="h-48 sm:h-32">
             <h1 class="text-3xl mt-5">Sign up</h1>
           </div>
           <div class="h-16">
@@ -263,7 +273,7 @@ const login = async () => {
               :placeholder="user.name"
               type="text"
               disabled
-              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+              class="w-[300px] sm:w-[438px] h-12 rounded-md font-normal dark:bg-black brightness-50 disabled:bg-neutral-800 border-none"
             />
           </div>
           <div class="h-16">
@@ -271,10 +281,10 @@ const login = async () => {
               :placeholder="user.email"
               type="text"
               disabled
-              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-md font-normal dark:bg-black"
+              class="w-[300px] sm:w-[438px] h-12 rounded-md font-normal dark:bg-black brightness-50 disabled:bg-neutral-800 border-none"
             />
           </div>
-          <div class="h-28">
+          <div class="grow">
             <h1 class="text-center font-normal text-[#ff0000]">
               {{ signup_error }}
             </h1>
@@ -282,7 +292,7 @@ const login = async () => {
           <div class="h-16">
             <button
               @click="signup"
-              class="transition duration-300 ease-in-out w-[438px] h-12 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
+              class="transition duration-300 ease-in-out w-[300px] sm:w-[438px] h-12 rounded-full text-stone-200 bg-black dark:text-black dark:bg-stone-200 hover:bg-black/80 dark:hover:bg-white/80 disabled:bg-black/40 dark:disabled:bg-white/40 disabled:pointer-events-none"
             >
               Sign up
             </button>
@@ -291,32 +301,35 @@ const login = async () => {
       </Dialog>
     </transition>
     <div
-      class="h-screen flex justify-center items-center select-none font-bold text-black dark:text-stone-200"
+      class="sm:h-screen flex flex-col sm:flex-row justify-center items-center select-none font-bold text-black dark:text-stone-200"
     >
-      <div class="w-[400px] h-[328px] bg-[url(twitter.svg)] bg-no-repeat"></div>
-      <div class="ml-80">
-        <div class="h-32">
-          <h1 class="text-6xl">Happening now</h1>
-        </div>
-
-        <div class="h-16">
-          <h1 class="text-3xl">Join today.</h1>
-        </div>
-        <div class="h-24 flex flex-col justify-between">
-          <NuxtLink
-            to="?signup"
-            @click="signup_dialog = true"
-            class="transition duration-300 ease-in-out w-[300px] h-10 flex justify-center items-center rounded-full bg-cyan-600 hover:bg-cyan-500 text-stone-200"
-          >
-            Create account
-          </NuxtLink>
-          <NuxtLink
-            to="?login"
-            @click="login_dialog = true"
-            class="transition duration-300 ease-in-out w-[300px] h-10 flex justify-center items-center rounded-full border border-slate-600 text-cyan-600 hover:bg-cyan-600/10"
-          >
-            Sign in
-          </NuxtLink>
+      <div class="flex mx-12 flex-col sm:flex-row gap-x-80 gap-y-12">
+        <div
+          class="mt-10 sm:mt-0 w-[45px] h-[36px] sm:w-[400px] sm:h-[328px] bg-[url(twitter.svg)] bg-no-repeat"
+        ></div>
+        <div class="flex flex-col">
+          <div class="h-32">
+            <h1 class="text-5xl sm:text-6xl">Happening now</h1>
+          </div>
+          <div class="h-16">
+            <h1 class="text-2xl sm:text-3xl">Join today.</h1>
+          </div>
+          <div class="h-24 flex flex-col justify-between">
+            <NuxtLink
+              to="?signup"
+              @click="signup_dialog = true"
+              class="transition duration-300 ease-in-out w-[300px] h-10 flex justify-center items-center rounded-full bg-cyan-600 hover:bg-cyan-500 text-stone-200"
+            >
+              Create account
+            </NuxtLink>
+            <NuxtLink
+              to="?login"
+              @click="login_dialog = true"
+              class="transition duration-300 ease-in-out w-[300px] h-10 flex justify-center items-center rounded-full border border-slate-600 text-cyan-600 hover:bg-cyan-600/10"
+            >
+              Sign in
+            </NuxtLink>
+          </div>
         </div>
       </div>
     </div>
