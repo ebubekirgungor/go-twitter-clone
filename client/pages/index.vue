@@ -95,7 +95,7 @@ const login = async () => {
     },
   });
   if ((response.value as any).status == "success") {
-    navigateTo("/main");
+    navigateTo("/home");
   } else login_error.value = (response.value as any).message as string;
 };
 </script>
