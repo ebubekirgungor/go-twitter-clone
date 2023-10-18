@@ -21,8 +21,8 @@ func SetupRoutes(app *fiber.App) {
 	users.Delete("/:id", middleware.Protected(), controllers.DeleteUser)
 
 	tweets := api.Group("/tweets")
-	tweets.Get("/", controllers.AllTweets)
-	tweets.Get("/:id", controllers.Tweet)
+	tweets.Get("/", middleware.Protected(), controllers.AllTweets)
+	tweets.Get("/:id", middleware.Protected(), controllers.Tweet)
 	tweets.Post("/", middleware.Protected(), controllers.AddTweet)
 	tweets.Delete("/:id", middleware.Protected(), controllers.DeleteTweet)
 }

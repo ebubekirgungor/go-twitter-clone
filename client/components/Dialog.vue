@@ -15,19 +15,19 @@ export default {
           v-if="signup_step == 1"
           to="/"
           @click="$emit('close')"
-          class="transition duration-300 ease-in-out flex justify-center items-center w-10 h-10 rounded-full hover:bg-black/10 dark:hover:bg-white/10"
+          class="transition duration-300 ease-in-out flex justify-center items-center w-9 h-9 rounded-full hover:bg-black/10 dark:hover:bg-white/10"
           ><img
             src="/close.svg"
-            class="pointer-events-none w-6 h-6 dark:invert"
+            class="pointer-events-none w-5 h-5 dark:invert"
         /></NuxtLink>
         <button
           v-else
           @click="$emit('back')"
-          class="transition duration-300 ease-in-out flex justify-center items-center w-10 h-10 rounded-full hover:bg-black/10 dark:hover:bg-white/10"
+          class="transition duration-300 ease-in-out flex justify-center items-center w-9 h-9 rounded-full hover:bg-black/10 dark:hover:bg-white/10"
         >
           <img
             src="/back.svg"
-            class="pointer-events-none w-6 h-6 dark:invert"
+            class="pointer-events-none w-5 h-5 dark:invert"
           />
         </button>
         <h1 class="text-xl ml-5 mt-1">Step {{ signup_step }} of 3</h1>
@@ -37,19 +37,19 @@ export default {
           v-if="login_step == 1"
           to="/"
           @click="$emit('close')"
-          class="transition duration-300 ease-in-out flex justify-center items-center w-10 h-10 rounded-full hover:bg-black/10 dark:hover:bg-white/10"
+          class="transition duration-300 ease-in-out flex justify-center items-center w-9 h-9 rounded-full hover:bg-black/10 dark:hover:bg-white/10"
           ><img
             src="/close.svg"
-            class="pointer-events-none w-6 h-6 dark:invert"
+            class="pointer-events-none w-5 h-5 dark:invert"
         /></NuxtLink>
         <button
           v-else
           @click="$emit('back')"
-          class="transition duration-300 ease-in-out flex justify-center items-center w-10 h-10 rounded-full hover:bg-black/10 dark:hover:bg-white/10"
+          class="transition duration-300 ease-in-out flex justify-center items-center w-9 h-9 rounded-full hover:bg-black/10 dark:hover:bg-white/10"
         >
           <img
             src="/back.svg"
-            class="pointer-events-none w-6 h-6 dark:invert"
+            class="pointer-events-none w-5 h-5 dark:invert"
           />
         </button>
       </div>
