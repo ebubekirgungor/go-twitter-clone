@@ -1,5 +1,7 @@
+import { useToken } from "@/store/token";
 export default defineNuxtRouteMiddleware((to, from) => {
-  if (!localStorage.getItem("token")) {
-    return navigateTo("/");
+  const { token } = useToken();
+  if (!token) {
+    return navigateTo("/?login");
   }
 });

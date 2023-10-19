@@ -2,6 +2,7 @@
 import { useToken } from "@/store/token";
 definePageMeta({
   layout: "app",
+  middleware: "auth",
 });
 useHead({
   title: "Home / Twitter",
@@ -10,19 +11,11 @@ interface Tweet {
   content: string;
 }
 const { token } = useToken();
-
-const { data: tweets, refresh } = await useAsyncData("tweets", () => {
-  $fetch("/api/tweets", {
-    method: "get",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  
+const { data: tweets } = useFetch<Array<Tweet>>("http://127.0.0.1/api/tweets", {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
 });
-refresh();
-console.log(token);
-console.log(tweets);
 </script>
 <template>
   <div>
