@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useToken } from "@/store/token";
+import { useUser } from "@/store/user";
 definePageMeta({
   layout: "app",
   middleware: "auth",
@@ -10,15 +10,15 @@ useHead({
 interface Tweet {
   content: string;
 }
-const { token } = useToken();
+const { user } = useUser();
 const { data: tweets } = useFetch<Array<Tweet>>("http://127.0.0.1/api/tweets", {
   headers: {
-    Authorization: `Bearer ${token}`,
+    Authorization: `Bearer ${user.token}`,
   },
 });
 </script>
 <template>
-  <div>
+  <div class="border-x border-[#2f3336]">
     <h1 v-for="tweet in tweets">
       {{ tweet.content }}
     </h1>

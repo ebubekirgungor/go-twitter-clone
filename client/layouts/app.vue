@@ -5,14 +5,14 @@ const route = useRoute();
   <main
     class="min-h-[100dvh] bg-white dark:bg-black text-black dark:text-stone-200"
   >
-    <div class="flex">
+    <div class="flex justify-center">
       <nav class="flex flex-col gap-y-2">
         <NuxtLink
           to="/"
           class="flex justify-center items-center h-12 w-12 transition duration-200 ease-in-out hover:bg-white/10 rounded-full"
         >
           <div
-            class="bg-[url(twitter.svg)] bg-no-repeat w-[35px] h-[28px]"
+            class="bg-[url(twitter.svg)] bg-no-repeat w-[27px] h-[22px]"
           ></div>
         </NuxtLink>
         <NuxtLink

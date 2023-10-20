@@ -1,7 +1,7 @@
-import { useToken } from "@/store/token";
+import { useUser } from "~/store/user";
 export default defineNuxtRouteMiddleware((to, from) => {
-  const { token } = useToken();
-  if (!token) {
+  const { user } = useUser();
+  if (!user.token) {
     return navigateTo("/?login");
   }
 });

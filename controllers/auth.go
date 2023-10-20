@@ -131,5 +131,10 @@ func Login(c *fiber.Ctx) error {
 		return c.SendStatus(fiber.StatusInternalServerError)
 	}
 
-	return c.JSON(fiber.Map{"status": "success", "message": "Success login", "data": t})
+	return c.JSON(fiber.Map{"status": "success", "message": "Success login", "data": fiber.Map{
+		"id":       userData.ID,
+		"username": userData.Username,
+		"email":    userData.Email,
+		"token":    t,
+	}})
 }

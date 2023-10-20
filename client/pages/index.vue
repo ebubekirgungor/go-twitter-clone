@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
-import { useToken } from "@/store/token";
+import { useUser } from "@/store/user";
 const login_dialog = ref(route.query.login === null);
 const signup_dialog = ref(route.query.signup === null);
 const login_step = ref(1);
@@ -96,8 +96,8 @@ const login = async () => {
     },
   });
   if ((response.value as any).status == "success") {
-    const token = useToken();
-    token.token = (response.value as any).data;
+    const user = useUser();
+    user.user = (response.value as any).data;
     navigateTo("/home");
   } else login_error.value = (response.value as any).message as string;
 };
@@ -338,3 +338,4 @@ const login = async () => {
     </div>
   </main>
 </template>
+~/store/user
