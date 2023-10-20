@@ -5,6 +5,7 @@ export const useUser = defineStore("user", {
       id: null,
       username: null,
       email: null,
+      name: null,
       token: null,
     },
   }),

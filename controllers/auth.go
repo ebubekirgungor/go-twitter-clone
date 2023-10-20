@@ -20,6 +20,7 @@ type UserData struct {
 	ID       uint   `json:"id"`
 	Username string `json:"username"`
 	Email    string `json:"email"`
+	Name     string `json:"name"`
 	Password string `json:"password"`
 }
 
@@ -111,6 +112,7 @@ func Login(c *fiber.Ctx) error {
 			ID:       userModel.ID,
 			Username: userModel.Username,
 			Email:    userModel.Email,
+			Name:     userModel.Name,
 			Password: userModel.Password,
 		}
 	}
@@ -135,6 +137,7 @@ func Login(c *fiber.Ctx) error {
 		"id":       userData.ID,
 		"username": userData.Username,
 		"email":    userData.Email,
+		"name":     userData.Name,
 		"token":    t,
 	}})
 }
