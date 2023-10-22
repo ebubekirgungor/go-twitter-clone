@@ -41,7 +41,7 @@ const { data: userData } = useFetch<User>(
         <div class="flex justify-between ml-4 mr-4">
           <NuxtLink
             to="#"
-            class="-mt-16 transition duration-200 ease-in-out border-black border-4 rounded-full w-[138px] h-[138px] bg-[url(/default_profile.png)] bg-cover hover:brightness-[85%]"
+            class="-mt-[69px] transition duration-200 ease-in-out border-black border-4 rounded-full w-[138px] h-[138px] bg-[url(/default_profile.png)] bg-cover hover:brightness-[85%]"
           ></NuxtLink>
           <NuxtLink
             to="#"
@@ -82,7 +82,7 @@ const { data: userData } = useFetch<User>(
             >
           </div>
         </div>
-        <nav class="mt-4 flex w-full h-[53px] text-gray-500">
+        <nav class="mt-4 flex w-full h-[53px] text-gray-500 border-b-[1px] border-[#2f3336]">
           <NuxtLink
             :class="
               route.name?.toString() == 'username'
@@ -92,7 +92,7 @@ const { data: userData } = useFetch<User>(
             class="transition duration-200 ease-in-out flex justify-center items-center w-full hover:bg-white/10"
             :to="'/' + user.username"
           >
-            <div class="w-12 h-full flex flex-col justify-between items-center">
+            <div class="w-14 h-full flex flex-col justify-between items-center">
               <div></div>
               <h1>Posts</h1>
               <div
@@ -111,31 +111,12 @@ const { data: userData } = useFetch<User>(
             class="transition duration-200 ease-in-out flex justify-center items-center w-full hover:bg-white/10"
             :to="'/' + user.username + '/replies'"
             ><div
-              class="w-12 h-full flex flex-col justify-between items-center"
+              class="w-14 h-full flex flex-col justify-between items-center"
             >
               <div></div>
               <h1>Replies</h1>
               <div
                 v-if="route.name?.toString().split('-')[1] == 'replies'"
-                class="w-full h-1 rounded-full bg-[#1d9bf0]"
-              ></div>
-              <div v-else></div></div
-          ></NuxtLink>
-          <NuxtLink
-            :class="
-              route.name?.toString().split('-')[1] == 'highlight'
-                ? 'font-bold text-slate-200'
-                : ''
-            "
-            class="transition duration-200 ease-in-out flex justify-center items-center w-full hover:bg-white/10"
-            :to="'/' + user.username + '/highlight'"
-            ><div
-              class="w-12 h-full flex flex-col justify-between items-center"
-            >
-              <div></div>
-              <h1>Highlight</h1>
-              <div
-                v-if="route.name?.toString().split('-')[1] == 'highlight'"
                 class="w-full h-1 rounded-full bg-[#1d9bf0]"
               ></div>
               <div v-else></div></div
@@ -149,7 +130,7 @@ const { data: userData } = useFetch<User>(
             class="transition duration-200 ease-in-out flex justify-center items-center w-full hover:bg-white/10"
             :to="'/' + user.username + '/media'"
             ><div
-              class="w-12 h-full flex flex-col justify-between items-center"
+              class="w-14 h-full flex flex-col justify-between items-center"
             >
               <div></div>
               <h1>Media</h1>
@@ -168,7 +149,7 @@ const { data: userData } = useFetch<User>(
             class="transition duration-200 ease-in-out flex justify-center items-center w-full hover:bg-white/10"
             :to="'/' + user.username + '/likes'"
             ><div
-              class="w-12 h-full flex flex-col justify-between items-center"
+              class="w-14 h-full flex flex-col justify-between items-center"
             >
               <div></div>
               <h1>Likes</h1>

@@ -10,7 +10,7 @@ const { user } = useUser();
     <div class="flex justify-center">
       <nav class="flex flex-col gap-y-2 mr-2 mb-3">
         <NuxtLink
-          to="/"
+          to="/home"
           class="flex justify-center items-center h-12 w-12 transition duration-200 ease-in-out hover:bg-white/10 rounded-full"
         >
           <div
