@@ -11,7 +11,7 @@ interface Tweet {
   content: string;
 }
 const { user } = useUser();
-const { data: tweets } = useFetch<Array<Tweet>>("http://127.0.0.1/api/tweets", {
+const { data: tweets } = useFetch<Tweet[]>("http://127.0.0.1/api/tweets", {
   headers: {
     Authorization: `Bearer ${user.token}`,
   },

@@ -41,7 +41,7 @@ func validUser(id string, p string) bool {
 
 func User(c *fiber.Ctx) error {
 	user := models.User{}
-	database.DB.Db.Preload("Tweets").First(&user, c.Params("id"))
+	database.DB.Db.Preload("Tweets").Preload("Followings").Preload("Followers").First(&user, c.Params("id"))
 	if user.Username == "" {
 		return c.Status(404).JSON(fiber.Map{"error": "No user found with ID"})
 	}

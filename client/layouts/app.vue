@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { useUser } from "@/store/user";
 const route = useRoute();
+const { user } = useUser();
 </script>
 <template>
   <main
@@ -12,7 +14,7 @@ const route = useRoute();
           class="flex justify-center items-center h-12 w-12 transition duration-200 ease-in-out hover:bg-white/10 rounded-full"
         >
           <div
-            class="bg-[url(twitter.svg)] bg-no-repeat w-[27px] h-[22px]"
+            class="bg-[url(/twitter.svg)] bg-no-repeat w-[27px] h-[22px]"
           ></div>
         </NuxtLink>
         <NuxtLink
@@ -22,8 +24,8 @@ const route = useRoute();
           <div
             :class="
               route.name?.toString() == 'home'
-                ? 'bg-[url(home_active.svg)]'
-                : 'bg-[url(home.svg)]'
+                ? 'bg-[url(/home_active.svg)]'
+                : 'bg-[url(/home.svg)]'
             "
             class="ml-3 mr-5 w-6 h-6 dark:invert"
           ></div>
@@ -41,8 +43,8 @@ const route = useRoute();
           <div
             :class="
               route.name?.toString() == 'explore'
-                ? 'bg-[url(explore_active.svg)] font-bold'
-                : 'bg-[url(explore.svg)]'
+                ? 'bg-[url(/explore_active.svg)] font-bold'
+                : 'bg-[url(/explore.svg)]'
             "
             class="ml-3 mr-5 w-6 h-6 dark:invert"
           ></div>
@@ -60,8 +62,8 @@ const route = useRoute();
           <div
             :class="
               route.name?.toString() == 'notifications'
-                ? 'bg-[url(notifications_active.svg)] font-bold'
-                : 'bg-[url(notifications.svg)]'
+                ? 'bg-[url(/notifications_active.svg)] font-bold'
+                : 'bg-[url(/notifications.svg)]'
             "
             class="ml-3 mr-5 w-6 h-6 dark:invert"
           ></div>
@@ -81,8 +83,8 @@ const route = useRoute();
           <div
             :class="
               route.name?.toString() == 'messages'
-                ? 'bg-[url(messages_active.svg)] font-bold'
-                : 'bg-[url(messages.svg)]'
+                ? 'bg-[url(/messages_active.svg)] font-bold'
+                : 'bg-[url(/messages.svg)]'
             "
             class="ml-3 mr-5 w-6 h-6 dark:invert"
           ></div>
@@ -94,19 +96,21 @@ const route = useRoute();
           </h1>
         </NuxtLink>
         <NuxtLink
-          to="/profile"
+          :to="(user.username as any)"
           class="flex items-center h-12 w-[min-content] transition duration-200 ease-in-out hover:bg-white/10 rounded-full"
         >
           <div
             :class="
-              route.name?.toString() == 'profile'
-                ? 'bg-[url(profile_active.svg)] font-bold'
-                : 'bg-[url(profile.svg)]'
+              route.name?.toString().startsWith('username')
+                ? 'bg-[url(/profile_active.svg)] font-bold'
+                : 'bg-[url(/profile.svg)]'
             "
             class="ml-3 mr-5 w-6 h-6 dark:invert"
           ></div>
           <h1
-            :class="route.name?.toString() == 'profile' ? 'font-bold' : ''"
+            :class="
+              route.name?.toString().startsWith('username') ? 'font-bold' : ''
+            "
             class="mr-3 text-xl"
           >
             Profile
@@ -116,7 +120,7 @@ const route = useRoute();
           to="/"
           class="flex items-center h-12 w-[min-content] transition duration-200 ease-in-out hover:bg-white/10 rounded-full"
         >
-          <div class="ml-3 mr-5 w-6 h-6 dark:invert bg-[url(more.svg)]"></div>
+          <div class="ml-3 mr-5 w-6 h-6 dark:invert bg-[url(/more.svg)]"></div>
           <h1 class="mr-3 text-xl">More</h1>
         </NuxtLink>
         <div class="grow">

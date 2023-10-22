@@ -6,6 +6,7 @@ export const useUser = defineStore("user", {
       username: null,
       email: null,
       name: null,
+      joined: new Date(),
       token: null,
     },
   }),

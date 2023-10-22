@@ -308,7 +308,7 @@ const login = async () => {
     >
       <div class="flex mx-12 flex-col sm:flex-row gap-x-80 gap-y-12">
         <div
-          class="mt-10 sm:mt-0 w-[45px] h-[36px] sm:w-[400px] sm:h-[328px] bg-[url(twitter.svg)] bg-no-repeat"
+          class="mt-10 sm:mt-0 w-[45px] h-[36px] sm:w-[400px] sm:h-[328px] bg-[url(/twitter.svg)] bg-no-repeat"
         ></div>
         <div class="flex flex-col">
           <div class="h-32">

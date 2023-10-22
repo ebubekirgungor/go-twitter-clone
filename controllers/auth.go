@@ -17,11 +17,12 @@ import (
 )
 
 type UserData struct {
-	ID       uint   `json:"id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
+	ID       uint      `json:"id"`
+	Username string    `json:"username"`
+	Email    string    `json:"email"`
+	Name     string    `json:"name"`
+	Joined   time.Time `json:"joined"`
+	Password string    `json:"password"`
 }
 
 func CheckPasswordHash(password, hash string) bool {
@@ -113,6 +114,7 @@ func Login(c *fiber.Ctx) error {
 			Username: userModel.Username,
 			Email:    userModel.Email,
 			Name:     userModel.Name,
+			Joined:   userModel.CreatedAt,
 			Password: userModel.Password,
 		}
 	}
@@ -138,6 +140,7 @@ func Login(c *fiber.Ctx) error {
 		"username": userData.Username,
 		"email":    userData.Email,
 		"name":     userData.Name,
+		"joined":   userData.Joined,
 		"token":    t,
 	}})
 }
