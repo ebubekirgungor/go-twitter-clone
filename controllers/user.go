@@ -8,6 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 func hashPassword(password string) (string, error) {
@@ -41,9 +42,11 @@ func validUser(id string, p string) bool {
 
 func User(c *fiber.Ctx) error {
 	user := models.User{}
-	database.DB.Db.Preload("Tweets").Preload("Followings").Preload("Followers").First(&user, c.Params("id"))
+	database.DB.Db.Preload("Tweets", func(db *gorm.DB) *gorm.DB {
+		return db.Order("created_at DESC")
+	}).Preload("Followings").Preload("Followers").First(&user, c.Params("username"))
 	if user.Username == "" {
-		return c.Status(404).JSON(fiber.Map{"error": "No user found with ID"})
+		return c.Status(404).JSON(fiber.Map{"error": "No user found with username"})
 	}
 	return c.Status(200).JSON(user)
 }

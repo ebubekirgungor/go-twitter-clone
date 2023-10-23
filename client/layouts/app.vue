@@ -101,7 +101,7 @@ const { user } = useUser();
         >
           <div
             :class="
-              route.name?.toString().startsWith('username')
+              route.params.username?.toString() == user.username
                 ? 'bg-[url(/profile_active.svg)] font-bold'
                 : 'bg-[url(/profile.svg)]'
             "
@@ -109,7 +109,7 @@ const { user } = useUser();
           ></div>
           <h1
             :class="
-              route.name?.toString().startsWith('username') ? 'font-bold' : ''
+              route.params.username?.toString() == user.username ? 'font-bold' : ''
             "
             class="mr-3 text-xl"
           >

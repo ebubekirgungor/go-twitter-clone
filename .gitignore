@@ -31,3 +31,6 @@ client/node_modules
 
 # .env
 .env
+
+# nginx
+nginx.bat

@@ -1,17 +1,17 @@
 <script setup lang="ts">
-import { useUser } from "@/store/user";
 const route = useRoute();
 interface Tweet {
   content: string;
 }
 interface User {
   tweets: Tweet[];
+  name: string;
+  CreatedAt: Date;
   following: User[];
   followers: User[];
 }
-const { user } = useUser();
-const { data: userData } = useFetch<User>(
-  "http://127.0.0.1/api/users/" + user.id
+const { data: user } = useFetch<User>(
+  "http://127.0.0.1/api/users/" + route.params.username
 );
 </script>
 <template>
@@ -29,10 +29,10 @@ const { data: userData } = useFetch<User>(
           />
         </button>
         <div>
-          <h1 class="font-bold text-xl">{{ user.name }}</h1>
+          <h1 class="font-bold text-xl">{{ user!.name }}</h1>
           <h1 class="text-sm text-gray-500">
-            {{ userData!.tweets.length }}
-            {{ userData!.tweets.length == 1 ? "post" : "posts" }}
+            {{ user!.tweets.length }}
+            {{ user!.tweets.length == 1 ? "post" : "posts" }}
           </h1>
         </div>
       </div>
@@ -51,8 +51,8 @@ const { data: userData } = useFetch<User>(
           </NuxtLink>
         </div>
         <div class="mt-3 ml-4">
-          <h1 class="font-extrabold text-xl">{{ user.name }}</h1>
-          <h1 class="text-[15px] text-gray-500">@{{ user.username }}</h1>
+          <h1 class="font-extrabold text-xl">{{ user!.name }}</h1>
+          <h1 class="text-[15px] text-gray-500">@{{ route.params.username }}</h1>
           <div class="mt-3 flex gap-x-1">
             <div
               class="mt-[1px] w-[19px] h-[19px] bg-[url(/calendar.svg)] bg-cover"
@@ -63,20 +63,20 @@ const { data: userData } = useFetch<User>(
                 new Intl.DateTimeFormat("en", {
                   month: "long",
                   year: "numeric",
-                }).format(new Date(user.joined))
+                }).format(new Date(user!.CreatedAt))
               }}
             </h1>
           </div>
           <div class="mt-2 flex gap-x-5 text-sm decoration-slate-200">
             <NuxtLink to="#" class="text-gray-500 hover:underline"
               ><span class="text-slate-200">
-                {{ userData!.following.length }}
+                {{ user!.following.length }}
               </span>
               Following</NuxtLink
             >
             <NuxtLink to="#" class="text-gray-500 hover:underline"
               ><span class="text-slate-200">
-                {{ userData!.followers.length }}
+                {{ user!.followers.length }}
               </span>
               Followers</NuxtLink
             >
@@ -90,7 +90,7 @@ const { data: userData } = useFetch<User>(
                 : ''
             "
             class="transition duration-200 ease-in-out flex justify-center items-center w-full hover:bg-white/10"
-            :to="'/' + user.username"
+            :to="'/' + route.params.username"
           >
             <div class="w-14 h-full flex flex-col justify-between items-center">
               <div></div>
@@ -109,7 +109,7 @@ const { data: userData } = useFetch<User>(
                 : ''
             "
             class="transition duration-200 ease-in-out flex justify-center items-center w-full hover:bg-white/10"
-            :to="'/' + user.username + '/replies'"
+            :to="'/' + route.params.username + '/replies'"
             ><div
               class="w-14 h-full flex flex-col justify-between items-center"
             >
@@ -128,7 +128,7 @@ const { data: userData } = useFetch<User>(
                 : ''
             "
             class="transition duration-200 ease-in-out flex justify-center items-center w-full hover:bg-white/10"
-            :to="'/' + user.username + '/media'"
+            :to="'/' + route.params.username + '/media'"
             ><div
               class="w-14 h-full flex flex-col justify-between items-center"
             >
@@ -147,7 +147,7 @@ const { data: userData } = useFetch<User>(
                 : ''
             "
             class="transition duration-200 ease-in-out flex justify-center items-center w-full hover:bg-white/10"
-            :to="'/' + user.username + '/likes'"
+            :to="'/' + route.params.username + '/likes'"
             ><div
               class="w-14 h-full flex flex-col justify-between items-center"
             >
