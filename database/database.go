@@ -1,8 +1,10 @@
 package database
 
 import (
+	"fmt"
 	"log"
 
+	"go-twitter-clone/config"
 	"go-twitter-clone/models"
 
 	"gorm.io/driver/postgres"
@@ -17,7 +19,7 @@ type Dbinstance struct {
 var DB Dbinstance
 
 func ConnectDb() {
-	dsn := "host=localhost user=postgres password='123456' dbname=twitter port=5432 sslmode=disable"
+	dsn := fmt.Sprintf("host=localhost user=postgres password=%s dbname=%s port=5432 sslmode=disable", config.Config("DATABASE_PASSWORD"), config.Config("DATABASE_NAME"))
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
