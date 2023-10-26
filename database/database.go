@@ -19,7 +19,10 @@ type Dbinstance struct {
 var DB Dbinstance
 
 func ConnectDb() {
-	dsn := fmt.Sprintf("host=localhost user=postgres password=%s dbname=%s port=5432 sslmode=disable", config.Config("DATABASE_PASSWORD"), config.Config("DATABASE_NAME"))
+	dsn := fmt.Sprintf("host=localhost user=postgres password=%s dbname=%s port=%s sslmode=disable",
+		config.Config("DATABASE_PASSWORD"),
+		config.Config("DATABASE_NAME"),
+		config.Config(("DATABASE_PORT")))
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
